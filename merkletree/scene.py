@@ -1,9 +1,5 @@
 from manim import *
 
-
-
-
-
 class SimpleMerkleTree(Scene):
     def construct(self):
 
@@ -77,15 +73,15 @@ class SimpleMerkleTree(Scene):
 
         other_first_plain = Tex("\\texttt{\"trust\"}").move_to(LEFT)
         other_first_hex = Tex("\\texttt{0x8c4}...").move_to(LEFT)
-        other_first_hash = MathTex("B_{hash}").move_to(LEFT)
+        other_first_hash = MathTex("H_{trust}").move_to(LEFT)
 
         other_second_plain = Tex("\\texttt{\"more\"}").move_to(RIGHT)
         other_second_hex = Tex("\\texttt{0x650}...").move_to(RIGHT)
-        other_second_hash = MathTex("C_{hash}").move_to(RIGHT)
+        other_second_hash = MathTex("H_{more}").move_to(RIGHT)
 
         other_third_plain = Tex("\\texttt{\"truth\"}").move_to(RIGHT*3)
         other_third_hex = Tex("\\texttt{0x7a6}...").move_to(RIGHT*3)
-        other_third_hash = MathTex("D_{hash}").move_to(RIGHT*3)
+        other_third_hash = MathTex("H_{truth}").move_to(RIGHT*3)
 
         plain_group = Group(other_first_plain, other_second_plain,other_third_plain)
 
@@ -99,28 +95,28 @@ class SimpleMerkleTree(Scene):
         hex_group = Group(first_hex, other_first_hex, other_second_hex,other_third_hex)
 
 
-        first_hash = MathTex("A_{hash}").move_to(LEFT*3)
+        first_hash = MathTex("H_{less}").move_to(LEFT*3)
         hash_group = Group(first_hash,other_first_hash, other_second_hash,other_third_hash)
         self.play(ReplacementTransform(hex_group, hash_group))
 
         self.wait(time)
         self.play(hash_group.animate.shift(DOWN*2))
 
-        combined_hash_one = MathTex("hash(A_{hash} + B_{hash})").move_to(LEFT*2).scale(scale)
+        combined_hash_one = MathTex("hash(H_{less} + H_{trust})").move_to(LEFT*2).scale(scale)
         hash1_arrow = Arrow(first_hash.get_top(), combined_hash_one.get_bottom(), buff=0.25,stroke_width=3, max_tip_length_to_length_ratio=0.15)
         hash2_arrow = Arrow(other_first_hash.get_top(), combined_hash_one.get_bottom(), buff=0.25,stroke_width=3, max_tip_length_to_length_ratio=0.15)
 
         self.play(FadeIn(Group(combined_hash_one, hash1_arrow, hash2_arrow)))
         self.wait(time)
 
-        combined_hash_two = MathTex("hash(C_{hash} + D_{hash})").move_to(RIGHT*2).scale(scale)
+        combined_hash_two = MathTex("hash(H_{more} + H_{truth})").move_to(RIGHT*2).scale(scale)
         hash1_arrow = Arrow(other_second_hash.get_top(), combined_hash_two.get_bottom(), buff=0.25, stroke_width=3, max_tip_length_to_length_ratio=0.15)
         hash2_arrow = Arrow(other_third_hash.get_top(), combined_hash_two.get_bottom(), buff=0.25,stroke_width=3, max_tip_length_to_length_ratio=0.15)
 
         self.play(FadeIn(Group(combined_hash_two, hash1_arrow, hash2_arrow)))
         self.wait(time)
 
-        root_hash = MathTex("hash(hash(A_{hash} + B_{hash}) + hash(C_{hash} + D_{hash}))").move_to(UP*2).scale(scale)
+        root_hash = MathTex("hash(hash(H_{less} + H_{trust}) + hash(H_{more} + H_{truth}))").move_to(UP*2).scale(scale)
         hash1_arrow = Arrow(combined_hash_one.get_top(), root_hash.get_bottom(), buff=0.25,stroke_width=3, max_tip_length_to_length_ratio=0.1)
         hash2_arrow = Arrow(combined_hash_two.get_top(), root_hash.get_bottom(), buff=0.25,stroke_width=3, max_tip_length_to_length_ratio=0.1)
 
